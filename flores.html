@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flores para Valeria</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: white;
+            font-family: 'Dancing Script', cursive;
+        }
+        .flor {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background-size: cover;
+            user-select: none;
+            transition: all 1s ease-in-out;
+        }
+        .frase {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 72px;
+            font-weight: bold;
+            text-align: center;
+            white-space: nowrap;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+            color: #FF1493;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #FFB6C1, #FFC0CB);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(255,182,193,0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="frase">Te quiero Valeria</div>
+    <script>
+        const flores = [];
+
+        function crearFlor(x, y) {
+            const flor = document.createElement('div');
+            flor.classList.add('flor');
+            flor.style.left = x + 'px';
+            flor.style.top = y + 'px';
+            
+            const imagenAleatoria = Math.random();
+            if (imagenAleatoria < 0.33) {
+                flor.style.backgroundImage = "url('girasol.png')";
+            } else if (imagenAleatoria < 0.66) {
+                flor.style.backgroundImage = "url('girasol2.png')";
+            } else {
+                flor.style.backgroundImage = "url('rosa.png')";
+            }
+            
+            document.body.appendChild(flor);
+            flores.push(flor);
+        }
+
+        function distribuirFlores() {
+            for (let i = 0; i < 800; i++) {
+                const x = Math.random() * (window.innerWidth - 40);
+                const y = Math.random() * (window.innerHeight - 40);
+                setTimeout(() => crearFlor(x, y), i * 20); // Aumentado a 20ms para una generación más lenta
+            }
+        }
+
+        function mostrarFrase() {
+            const frase = document.querySelector('.frase');
+            frase.style.opacity = '1';
+            frase.style.transform = 'translate(-50%, -50%) scale(1.1)';
+            setTimeout(() => {
+                frase.style.transform = 'translate(-50%, -50%) scale(1)';
+            }, 500);
+        }
+
+        function formarCorazon() {
+            const escala = Math.min(window.innerWidth, window.innerHeight) * 0.03;
+            const offsetY = 0;
+
+            flores.forEach((flor, index) => {
+                setTimeout(() => {
+                    const t = (index / flores.length) * Math.PI * 2;
+                    const x = 16 * Math.pow(Math.sin(t), 3);
+                    const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+                    flor.style.left = (window.innerWidth / 2 + x * escala) + 'px';
+                    flor.style.top = (window.innerHeight / 2 + y * escala + offsetY) + 'px';
+                }, index * 5);
+            });
+        }
+
+        distribuirFlores();
+        setTimeout(mostrarFrase, 17000); // Ajustado para que aparezca después de que se generen todas las flores
+        setTimeout(formarCorazon, 19000); // Ajustado para que comience poco después de que aparezca la frase
+    </script>
+</body>
+</html>
